@@ -1,0 +1,1072 @@
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Truna — The Specialist Thesis</title>
+<style>
+:root{
+  --fs-display:clamp(40px,6.2vw,92px);
+  --fs-heading:clamp(26px,3.2vw,48px);
+  --fs-subhead:clamp(17px,1.9vw,23px);
+  --fs-body:clamp(15px,1.35vw,18px);
+  --fs-caption:12px;
+  --fs-micro:10.5px;
+
+  --ground:#10151B; --panel:#161C24; --ink:#ECEAE3; --muted:#98A0A8; --faint:#5E6871;
+  --line:#242C35; --dag:#7E93AC; --dag-dim:#42505F; --loop:#E08A3C; --loop-soft:rgba(224,138,60,.14);
+  --serif:"Iowan Old Style","Palatino Nova",Palatino,"Book Antiqua",Georgia,serif;
+  --sans:"Avenir Next",Avenir,"Segoe UI",system-ui,-apple-system,sans-serif;
+  --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: light){
+  :root{
+    --ground:#F2EFE8; --panel:#FFFFFF; --ink:#1C222A; --muted:#5A636D; --faint:#8B939C;
+    --line:#DCD7CC; --dag:#54687E; --dag-dim:#A9B6C3; --loop:#C26A1B; --loop-soft:rgba(194,106,27,.12);
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#10151B; --panel:#161C24; --ink:#ECEAE3; --muted:#98A0A8; --faint:#5E6871;
+  --line:#242C35; --dag:#7E93AC; --dag-dim:#42505F; --loop:#E08A3C; --loop-soft:rgba(224,138,60,.14);
+}
+:root[data-theme="light"]{
+  --ground:#F2EFE8; --panel:#FFFFFF; --ink:#1C222A; --muted:#5A636D; --faint:#8B939C;
+  --line:#DCD7CC; --dag:#54687E; --dag-dim:#A9B6C3; --loop:#C26A1B; --loop-soft:rgba(194,106,27,.12);
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{background:var(--ground);color:var(--ink);font-family:var(--sans);line-height:1.55;
+  -webkit-font-smoothing:antialiased}
+
+#rings{position:fixed;inset:0;z-index:0;pointer-events:none}
+
+/* ---------- deck chrome ---------- */
+.deck{position:relative;z-index:1}
+body.slides{overflow:hidden;height:100vh}
+body.slides .deck{height:100vh}
+.slide{padding:clamp(28px,5vh,64px) clamp(22px,6vw,88px) clamp(58px,9vh,88px)}
+body.slides .slide{position:absolute;inset:0;overflow-y:auto;opacity:0;visibility:hidden;
+  transform:scale(1.045);
+  transition:opacity .45s ease,transform .45s ease,visibility .45s;
+  display:flex;flex-direction:column;justify-content:center}
+body.slides .slide.active{opacity:1;visibility:visible;transform:scale(1)}
+@media (prefers-reduced-motion: reduce){
+  body.slides .slide{transition:none;transform:none}
+}
+body:not(.slides) .slide{min-height:92vh;border-bottom:1px solid var(--line);
+  display:flex;flex-direction:column;justify-content:center}
+
+.hud{position:fixed;left:0;right:0;bottom:0;z-index:9;pointer-events:none;display:none}
+body.slides .hud{display:block}
+.hud .row{display:flex;justify-content:space-between;align-items:center;
+  padding:10px clamp(22px,6vw,88px) 14px;font-family:var(--mono);font-size:var(--fs-micro);
+  letter-spacing:.14em;color:var(--faint)}
+.hud .keys{text-transform:uppercase}
+.hud .right{display:flex;align-items:center;gap:12px}
+.hud svg{display:block}
+.hud .track{stroke:var(--line)}
+.hud .fill{stroke:var(--loop);transition:stroke-dashoffset .4s ease;
+  transform:rotate(-90deg);transform-origin:center}
+.hud button{pointer-events:auto;background:none;border:1px solid var(--line);color:var(--muted);
+  font-family:var(--mono);font-size:var(--fs-caption);line-height:1;padding:6px 12px;border-radius:4px;
+  cursor:pointer}
+.hud button:hover,.hud button:focus-visible{border-color:var(--loop);color:var(--ink);outline:none}
+
+/* ---------- shared anatomy ---------- */
+.inner{max-width:1020px;width:100%;margin:0 auto}
+.eyebrow{font-family:var(--mono);font-size:var(--fs-micro);letter-spacing:.26em;text-transform:uppercase;
+  color:var(--loop);margin:0 0 24px}
+h1,h2{font-family:var(--serif);font-weight:500;letter-spacing:-.01em;text-wrap:balance;margin:0}
+h1{font-size:var(--fs-display);line-height:1.04}
+h2{font-size:var(--fs-heading);line-height:1.1;margin-bottom:26px}
+.lede{font-size:var(--fs-subhead);color:var(--muted);max-width:34em;margin:22px 0 0}
+.lede b,.body b{color:var(--ink);font-weight:600}
+.body{font-size:var(--fs-body);color:var(--muted);max-width:34em;margin:0 0 14px}
+.kicker{margin-top:30px;padding:18px 22px;border-left:2px solid var(--loop);
+  background:var(--loop-soft);border-radius:0 8px 8px 0;max-width:40em}
+.kicker p{margin:0;font-family:var(--serif);font-size:var(--fs-subhead);line-height:1.4;color:var(--ink)}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:clamp(20px,4vw,56px);align-items:center}
+@media(max-width:760px){.cols{grid-template-columns:1fr}}
+.fig{margin:0}
+.fig svg{display:block;width:100%;height:auto}
+.fig figcaption{font-family:var(--mono);font-size:var(--fs-caption);letter-spacing:.08em;color:var(--faint);
+  margin-top:10px}
+.fig text{paint-order:stroke;stroke:var(--ground);stroke-width:5px;stroke-linejoin:round}
+
+ul.marks{list-style:none;margin:8px 0 0;padding:0;max-width:40em}
+ul.marks li{position:relative;padding:12px 0 12px 32px;color:var(--muted);
+  font-size:var(--fs-body);border-bottom:1px solid var(--line)}
+ul.marks li:last-child{border-bottom:none}
+ul.marks li::before{content:"";position:absolute;left:2px;top:22px;width:9px;height:9px;
+  border:2px solid var(--loop);border-radius:50%}
+ul.marks li b{color:var(--ink);font-weight:600}
+.now{display:block;font-family:var(--mono);font-size:var(--fs-caption);letter-spacing:.04em;
+  color:var(--loop);margin-top:3px}
+.apptag{display:block;font-family:var(--mono);font-size:var(--fs-micro);letter-spacing:.18em;
+  text-transform:uppercase;color:var(--dag);margin-bottom:3px}
+
+/* title + close */
+.s-title .brand{font-family:var(--mono);font-size:var(--fs-caption);letter-spacing:.3em;
+  text-transform:uppercase;color:var(--loop);margin:0 0 32px}
+.closing{margin-top:44px;font-family:var(--serif);font-weight:500;
+  font-size:var(--fs-heading);line-height:1.15;color:var(--loop);letter-spacing:-.01em}
+.endfoot{margin-top:52px;font-family:var(--mono);font-size:var(--fs-micro);letter-spacing:.2em;
+  text-transform:uppercase;color:var(--faint)}
+
+/* stacked feature rows */
+.stack{margin:18px 0 0;padding:0;list-style:none;max-width:46em}
+.stack li{display:grid;grid-template-columns:26px 1fr;gap:16px;align-items:center;
+  padding:16px 18px;border:1px solid var(--line);border-radius:10px;margin-bottom:10px;
+  background:var(--panel)}
+.stack .glyph{width:16px;height:16px;border-radius:50%;border:2.5px solid var(--loop);justify-self:center}
+.stack .lvl{font-family:var(--mono);font-size:var(--fs-micro);letter-spacing:.18em;text-transform:uppercase;
+  color:var(--loop);font-weight:600}
+.stack .what{font-size:var(--fs-body);color:var(--muted);min-width:0}
+.stack .what b{color:var(--ink)}
+@media(max-width:760px){
+  .stack li{grid-template-columns:22px 1fr;grid-auto-rows:auto}
+  .stack .what{grid-column:2}
+}
+
+/* faq */
+.faq{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:8px}
+@media(max-width:760px){.faq{grid-template-columns:1fr}}
+.faq .qa{border:1px solid var(--line);border-radius:12px;padding:16px 18px;background:var(--panel)}
+.faq .q{font-family:var(--mono);font-size:var(--fs-caption);letter-spacing:.03em;color:var(--loop);
+  margin:0 0 8px;font-weight:600}
+.faq .a{margin:0;font-size:var(--fs-body);color:var(--muted)}
+.faq .a b{color:var(--ink)}
+
+/* refs */
+.refs{display:flex;flex-wrap:wrap;gap:6px 16px;align-items:baseline;margin-top:22px;
+  font-family:var(--mono);font-size:var(--fs-micro);letter-spacing:.04em;color:var(--faint)}
+.refs .rl{letter-spacing:.2em;text-transform:uppercase;color:var(--loop);margin-right:4px}
+.refs a{color:var(--faint);text-decoration:underline;
+  text-decoration-style:dotted;text-underline-offset:3px}
+.refs a:hover,.refs a:focus-visible{color:var(--loop);outline:none}
+
+/* three-cell grids (team + exhibit) */
+.tri{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-top:26px}
+@media(max-width:860px){.tri{grid-template-columns:1fr}}
+.tri .cell{border:1px solid var(--line);border-radius:12px;padding:18px 18px 16px;
+  background:var(--panel);display:flex;flex-direction:column;gap:10px}
+.tri .cell.win{border-color:var(--loop);box-shadow:0 0 0 1px var(--loop-soft)}
+.tri .tag{font-family:var(--mono);font-size:var(--fs-micro);letter-spacing:.2em;text-transform:uppercase;
+  margin:0;color:var(--dag)}
+.tri .cell.win .tag{color:var(--loop)}
+.tri h3{font-family:var(--serif);font-size:var(--fs-subhead);margin:0;font-weight:500;line-height:1.2}
+.tri p{margin:0;font-size:var(--fs-body);color:var(--muted)}
+.tri p b{color:var(--ink)}
+
+/* team extras */
+.evrow{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:26px;max-width:56em}
+.evrow img{width:100%;aspect-ratio:16/10;object-fit:cover;border-radius:8px;
+  border:1px solid var(--line);display:block}
+.evcap{font-family:var(--mono);font-size:var(--fs-micro);letter-spacing:.08em;color:var(--faint);
+  margin-top:8px;text-transform:uppercase}
+@media(max-width:680px){.evrow{grid-template-columns:1fr 1fr}}
+.logos{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-top:20px}
+.logos .lchip{background:#fff;border-radius:8px;padding:8px 14px;display:flex;
+  align-items:center;height:44px}
+.logos .lchip img{height:26px;width:auto;display:block}
+
+/* flood grid */
+.floodgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.floodgrid img{width:100%;aspect-ratio:16/10;object-fit:cover;border-radius:6px;
+  border:1px solid var(--line);display:block;filter:saturate(.55) brightness(.8)}
+.floodcap{font-family:var(--mono);font-size:var(--fs-micro);letter-spacing:.08em;color:var(--faint);
+  margin-top:8px;text-transform:uppercase}
+
+/* coverage video grid */
+.vidgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:20px}
+@media(max-width:860px){.vidgrid{grid-template-columns:1fr}}
+.vidgrid video{width:100%;height:auto;display:block;border-radius:10px;
+  border:1px solid var(--line);background:#fff}
+.vidgrid figcaption{margin-top:6px}
+
+/* stat row */
+.statrow{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
+.statrow .stat{border:1px solid var(--line);border-radius:10px;background:var(--panel);
+  padding:12px 18px;min-width:150px}
+.statrow .stat.hot{border-color:var(--loop);box-shadow:0 0 0 1px var(--loop-soft)}
+.statrow .v{font-family:var(--mono);font-variant-numeric:tabular-nums;font-size:var(--fs-subhead);
+  color:var(--ink);line-height:1.1}
+.statrow .stat.hot .v{color:var(--loop)}
+.statrow .k{font-family:var(--mono);font-size:var(--fs-micro);letter-spacing:.1em;text-transform:uppercase;
+  color:var(--faint);margin-top:4px}
+
+/* coverage comparison table */
+.covtab{border:1px solid var(--line);border-radius:10px;background:var(--panel);
+  overflow-x:auto;margin-top:18px;max-width:34em}
+.covtab table{border-collapse:collapse;width:100%;font-size:var(--fs-caption)}
+.covtab th{font-family:var(--mono);font-size:var(--fs-micro);letter-spacing:.14em;text-transform:uppercase;
+  color:var(--faint);text-align:left;padding:10px 16px;border-bottom:1px solid var(--line)}
+.covtab td{padding:9px 16px;border-bottom:1px solid var(--line);color:var(--muted)}
+.covtab tr:last-child td{border-bottom:none}
+.covtab td.n{font-family:var(--mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+.covtab tr.us td{color:var(--ink);font-weight:600;background:var(--loop-soft)}
+
+/* print */
+@media print{
+  @page{size:15in 9.375in;margin:0}
+  html,body{background:var(--ground)!important;
+    -webkit-print-color-adjust:exact;print-color-adjust:exact}
+  #rings,.hud{display:none!important}
+  body:not(.slides) .slide{height:100vh;min-height:0;overflow:hidden;
+    border-bottom:none;break-after:page;break-inside:avoid}
+  .endfoot{visibility:hidden}
+}
+
+/* ---- v6 minimal / headline style ---- */
+.mega .inner{display:flex;flex-direction:column;justify-content:center;min-height:70vh}
+.huge{font-family:var(--serif);font-weight:500;font-size:var(--fs-display);
+  line-height:1.07;margin:0;letter-spacing:-.012em;max-width:12.5em}
+.huge .accent{color:var(--loop)}
+.sub{font-size:var(--fs-body);color:var(--muted);margin-top:28px;max-width:38em;line-height:1.55}
+.sub b{color:var(--ink)}
+.neq{font-family:var(--serif);font-size:clamp(60px,9vw,150px);color:var(--loop);line-height:1;margin:10px 0}
+.bigstats{display:flex;gap:56px;margin-top:44px;flex-wrap:wrap;align-items:flex-end}
+.bigstats .bs .v{font-family:var(--serif);font-size:var(--fs-display);line-height:1;color:var(--loop)}
+.bigstats .bs.dim .v{color:var(--faint)}
+.bigstats .bs .k{font-size:var(--fs-caption);color:var(--muted);margin-top:12px;max-width:17em;line-height:1.45}
+.rowlist{margin-top:36px;display:flex;flex-direction:column;max-width:56em}
+.rowlist .r{padding:13px 0;border-top:1px solid var(--line);font-size:var(--fs-body);color:var(--muted);line-height:1.5}
+.rowlist .r b{color:var(--ink)}
+.mathstrip{font-family:var(--mono);font-size:var(--fs-subhead);color:var(--ink);margin-top:30px;letter-spacing:.02em}
+.mathstrip .hot{color:var(--loop)}
+.tfaces{display:flex;gap:40px;margin-top:40px;flex-wrap:wrap}
+.tfaces .tf{display:flex;align-items:center;gap:14px}
+.tfaces img{width:64px;height:64px;border-radius:50%;object-fit:cover;border:1px solid var(--line)}
+.tfaces .nm{font-size:var(--fs-body);color:var(--ink)}
+.tfaces .rl{font-size:var(--fs-caption);color:var(--faint);font-family:var(--mono);letter-spacing:.05em}
+
+
+
+/* ---- mobile (portrait phones) ---- */
+@media(max-width:640px){
+  body.slides .slide{overflow-x:hidden}
+  .inner{max-width:100%}
+  .bigstats{gap:26px}
+  .rowlist{max-width:100%}
+  #exhibit-a .tri{grid-template-columns:1fr !important}
+  .tfaces{gap:18px}
+  .inner img,.inner svg,.inner video{max-width:100%;height:auto}
+  .hud .keys{display:none}
+  .hud .row{justify-content:flex-end}
+  .mega .inner{justify-content:flex-start;min-height:0}
+}
+
+/* hide the whole bottom bar when space is tight (small laptops & phones) */
+@media (max-width: 700px), (max-height: 800px){
+  body.slides .hud{display:none}
+}
+
+/* keep tall mega slides inside the viewport */
+.mega .fig svg{max-height:42vh}
+@media (max-height: 920px){
+  .neq{font-size:clamp(40px,6vw,90px);margin:4px 0}
+  .sub{margin-top:16px}
+  .mega .inner{min-height:0;justify-content:flex-start}
+  .mega .fig svg{max-height:36vh}
+  .bigstats{margin-top:24px;gap:36px}
+}
+/* landscape phones: very short viewports */
+@media (max-height: 520px){
+  .neq{font-size:clamp(30px,10vh,48px)}
+  .sub{margin-top:12px}
+  .mega .fig svg{max-height:60vh}
+}
+
+/* side-by-side text+figure on wide viewports */
+.mfig{margin-top:34px}
+@media (min-width: 1000px){
+  .mega .inner.split{display:flex;flex-direction:row;align-items:center;gap:clamp(36px,4vw,72px)}
+  .split .mtext{flex:1 1 54%;min-width:0}
+  .split .mfig{flex:0 1 44%;min-width:0;margin-top:0}
+  .split .mfig .fig svg{max-height:66vh}
+  .split .bigstats{margin-top:18px;gap:18px}
+}
+
+/* videos slide on short laptop screens: one row of four */
+@media (min-width: 1000px) and (max-height: 920px){
+  #filling .vidgrid{grid-template-columns:repeat(4,1fr);gap:10px}
+  #filling .body{max-width:64em}
+}
+
+/* exhibit on short laptop screens: one row of four, compact cells */
+@media (min-width: 1000px) and (max-height: 920px){
+  #exhibit-a .tri{grid-template-columns:repeat(4,1fr) !important;gap:12px}
+}
+
+/* founder profiles on small/vertical screens: images shrink to thumbnails */
+@media (max-width: 760px){
+  .evrow{grid-template-columns:repeat(4,1fr) !important;gap:8px}
+  .evrow img{height:56px;object-fit:cover}
+  .pavatar{width:60px !important;height:60px !important}
+}
+
+/* ---- type scale responsive redefinitions ---- */
+@media (max-height: 920px){ :root{--fs-display:clamp(30px,4.6vw,64px)} }
+@media (max-width: 640px){ :root{--fs-display:clamp(30px,9vw,48px)} .huge{max-width:100%} .sub{max-width:100%} }
+@media (max-height: 520px){ :root{--fs-display:clamp(22px,7vh,34px)} }
+</style>
+
+<canvas id="rings" aria-hidden="true"></canvas>
+
+<div class="deck" id="deck">
+
+<!-- 1 · TITLE -->
+<section class="slide s-title" id="s1">
+  <div class="inner">
+    <p class="brand">Truna &middot; truna.ai</p>
+    <h1>Agents made execution possible.<br>Specialist judgment is the bottleneck.</h1>
+    <p class="lede"><b>Truna trains specialist decision models</b> for business functions —
+    a coverage-driven data engine builds <b>the training distributions that don't exist.</b></p>
+  </div>
+</section>
+
+<section class="slide mega" id="dest">
+  <div class="inner split"><div class="mtext">
+    <h2 class="huge"><span style="color:var(--loop)">The destination:</span> models specialized<br>to their roles and their environments.</h2>
+    <p class="sub">Each has learned your market, economics, constraints, history and
+    decision logic — and <b>builds what compounds: trust, resources, a team.</b>
+    Each keeps learning from outcomes.</p>
+  </div>
+    <div class="mfig" style="max-width:560px;width:100%"><figure class="fig">
+        <svg viewBox="0 0 440 370" role="img" aria-label="A large circle for the whole data space with a small dense circle inside it for one business role; below, the inequality M expert is greater than M general inside the expert space">
+          <circle cx="220" cy="140" r="118" fill="none" stroke="var(--dag)" stroke-width="1.5" stroke-dasharray="7 7" opacity=".8"/>
+          <text x="220" y="42" text-anchor="middle" font-family="ui-monospace,Menlo,monospace" font-size="10.5" fill="var(--dag)">the whole data space</text>
+          <text x="220" y="58" text-anchor="middle" font-family="ui-monospace,Menlo,monospace" font-size="9.5" fill="var(--faint)">frontier models train here</text>
+          <circle cx="256" cy="176" r="34" fill="var(--loop-soft)" stroke="var(--loop)" stroke-width="2.2"/>
+          <text x="256" y="173" text-anchor="middle" font-family="ui-monospace,Menlo,monospace" font-size="10" fill="var(--loop)">one expert</text>
+          <text x="256" y="187" text-anchor="middle" font-family="ui-monospace,Menlo,monospace" font-size="9" fill="var(--muted)">CEO space</text>
+          <path d="M132 242 Q 178 234, 230 201" fill="none" stroke="var(--loop)" stroke-width="1.4"/>
+          <text x="118" y="252" text-anchor="middle" font-family="ui-monospace,Menlo,monospace" font-size="9.5" fill="var(--loop)">same B params,</text>
+          <text x="118" y="266" text-anchor="middle" font-family="ui-monospace,Menlo,monospace" font-size="9.5" fill="var(--loop)">trained only here</text>
+          <g font-family="ui-monospace,Menlo,monospace" text-anchor="middle">
+            <text x="220" y="330" font-size="24" fill="var(--ink)">M<tspan font-size="13" dy="5">expert</tspan><tspan dy="-5" dx="8">&gt;</tspan><tspan dx="8">M</tspan><tspan font-size="13" dy="5">general</tspan></text>
+            <text x="220" y="356" font-size="10" fill="var(--faint)">inside the expert space &middot; equal parameter count</text>
+          </g>
+        </svg>
+      </figure></div>
+  </div>
+</section>
+
+<section class="slide" id="origin">
+  <div class="inner" style="max-width:1280px">
+    <p class="eyebrow" style="text-align:center">origin &middot; Q2 2026</p>
+    <h2 style="text-align:center">We tried the obvious path first.</h2>
+    <p class="body" style="max-width:52em;margin-left:auto;margin-right:auto;text-align:center">Frontier models
+    + tools + RAG + our own agent architectures. <b>Billions of tokens. Runs of 40 &rarr; 72 &rarr; 720+ hours,
+    unattended.</b> The systems could keep executing.</p>
+    <div class="tri">
+      <div class="cell">
+        <p class="tag">Experiment 1 &middot; the judge</p>
+        <h3>Venture evaluation agent</h3>
+        <p>Models a business deeply — returns <b>its viable shapes</b>, not a verdict.</p>
+      </div>
+      <div class="cell">
+        <p class="tag">Experiment 2 &middot; the planner</p>
+        <h3>Scenario generation agent</h3>
+        <p>Generates <b>many distinct scenarios on purpose</b> — the seed layer of the data engine.</p>
+      </div>
+      <div class="cell">
+        <p class="tag">Experiment 3 &middot; the runner</p>
+        <h3>Autonomous run agent</h3>
+        <p>Runs plans <b>unattended for days</b>.</p>
+      </div>
+    </div>
+  
+    <p class="floodcap" style="text-align:center;margin-top:14px">three working systems came out of it — witnessed in the appendix</p>
+  </div>
+</section>
+
+<section class="slide mega" id="ceiling">
+  <div class="inner">
+    <p class="eyebrow">the ceiling</p>
+    <h2 class="huge">Autonomy is not expertise.</h2>
+    <p class="sub">We solved more and more of autonomy. <b>We hit the ceiling of expertise.</b>
+    The systems could keep working — they lacked specialist judgment, not tooling.
+    Harnesses and agents are the execution layer; <b>the missing piece is the intelligence inside them.</b></p>
+  </div>
+</section>
+
+<section class="slide mega" id="asset">
+  <div class="inner">
+    <p class="eyebrow">the missing asset</p>
+    <h2 class="huge" style="font-size:var(--fs-heading);margin-bottom:14px">The decision traces experts learn from</h2>
+    <h2 class="huge" style="color:var(--loop)">Were never logged.</h2>
+    <p class="sub">Companies log documents and outcomes — not <b>rejected alternatives, assumptions,
+    counterfactuals, or why an expert chose A over B.</b> The training distribution for specialist
+    judgment largely does not exist as a usable dataset — in pretraining or in enterprise logs.</p>
+  </div>
+</section>
+
+<section class="slide mega" id="synth">
+  <div class="inner">
+    <p class="eyebrow">why ordinary synthetic data is not enough</p>
+    <h2 class="huge">More data is not<br>more coverage.</h2>
+    <div class="rowlist">
+      <div class="r"><b>Self-Instruct</b> — more task variety &middot; <b>Evol-Instruct</b> — harder examples &middot; <b>Persona-driven</b> — more perspectives</div>
+      <div class="r"><b>Self-play</b> — improve against yourself &middot; <b>Adversarial</b> — find failures &middot; <b>Distillation</b> — copy a teacher</div>
+      <div class="r">All useful operators. <b>None maintains a measurable state of what is still missing.</b></div>
+    </div>
+  </div>
+</section>
+
+<section class="slide mega" id="machine">
+  <div class="inner split"><div class="mtext">
+    <p class="eyebrow">our solution</p>
+    <h2 class="huge">The data machine<br>that doesn't halt.</h2>
+    <p class="sub">(The machine that writes the missing data — and knows when the
+    space is full.)</p>
+    <p class="sub" style="margin-top:14px">seeds &rarr; <b>data machine</b> &rarr;
+    M<sub>CEO</sub> &middot; M<sub>CTO</sub> &middot; M<sub>SALES</sub></p>
+  
+    </div>
+    <div class="mfig" style="max-width:760px;width:100%"><figure class="fig">
+        <svg viewBox="0 0 440 330" role="img" aria-label="Pipeline: seeds feed a data engine, the data engine trains specialist models">
+          <defs>
+            <marker id="ar" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+              <path d="M0 0 L10 5 L0 10 z" fill="var(--loop)"/>
+            </marker>
+          </defs>
+          <g stroke="var(--dag)" stroke-width="1.6" fill="var(--panel)">
+            <rect x="30" y="30" width="380" height="62" rx="10"/>
+          </g>
+          <g font-family="ui-monospace,Menlo,monospace" font-size="12">
+            <text x="220" y="56" text-anchor="middle" fill="var(--ink)">seeds</text>
+            <text x="220" y="76" text-anchor="middle" fill="var(--faint)" font-size="10">role knowledge &middot; a company's own data &amp; ontology</text>
+          </g>
+          <path d="M220 92 L220 122" stroke="var(--loop)" stroke-width="2" fill="none" marker-end="url(#ar)"/>
+          <g stroke="var(--loop)" stroke-width="2" fill="var(--loop-soft)">
+            <rect x="30" y="128" width="380" height="62" rx="10"/>
+          </g>
+          <g font-family="ui-monospace,Menlo,monospace" font-size="12">
+            <text x="220" y="150" text-anchor="middle" fill="var(--loop)">the data engine</text>
+            <text x="220" y="167" text-anchor="middle" fill="var(--faint)" font-size="9.5">synthetic-data generation</text>
+            <text x="220" y="182" text-anchor="middle" fill="var(--faint)" font-size="9.5">measured coverage of the expert space</text>
+          </g>
+          <path d="M220 190 L220 220" stroke="var(--loop)" stroke-width="2" fill="none" marker-end="url(#ar)"/>
+          <g stroke="var(--dag)" stroke-width="1.6" fill="var(--panel)">
+            <rect x="30" y="226" width="116" height="56" rx="10"/>
+            <rect x="162" y="226" width="116" height="56" rx="10"/>
+            <rect x="294" y="226" width="116" height="56" rx="10"/>
+          </g>
+          <g font-family="ui-monospace,Menlo,monospace" font-size="12" fill="var(--ink)" text-anchor="middle">
+            <text x="88" y="250">M</text><text x="97" y="255" font-size="9">CEO</text>
+            <text x="220" y="250">M</text><text x="229" y="255" font-size="9">CTO</text>
+            <text x="352" y="250">M</text><text x="361" y="255" font-size="9">SALES</text>
+          </g>
+          <g font-family="ui-monospace,Menlo,monospace" font-size="9.5" fill="var(--faint)" text-anchor="middle">
+            <text x="88" y="272">specialist</text>
+            <text x="220" y="272">specialist</text>
+            <text x="352" y="272">specialist</text>
+          </g>
+          <text x="220" y="318" text-anchor="middle" font-family="ui-monospace,Menlo,monospace"
+                font-size="10" fill="var(--faint)">seeds &rarr; covered data &rarr; expert models</text>
+        </svg>
+      </figure></div>
+  </div>
+</section>
+
+<section class="slide mega" id="seeding">
+  <div class="inner split"><div class="mtext">
+    <h2 class="huge">Seed the machine with anything.<br>It never stops.</h2>
+    <p class="sub">It revisits every region from many directions — <b>overlapping passes
+    cancel each other's errors.</b> The data gets cleaner as it grows.</p>
+  
+    </div>
+    <div class="mfig" style="max-width:760px;width:100%"><figure class="fig">
+        <svg viewBox="0 0 440 360" role="img" aria-label="Data sequences growing from seed scenarios: chains of steps extend rightward opening new regions; some regions are revisited from diverse directions so signal amplifies and errors average out">
+          <defs>
+            <marker id="sq-ar" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto">
+              <path d="M0 0 L10 5 L0 10 z" fill="var(--dag-dim)"/>
+            </marker>
+          </defs>
+          <text x="46" y="40" text-anchor="middle" font-family="ui-monospace,Menlo,monospace" font-size="10" fill="var(--ink)">seeds</text>
+          <g font-family="ui-monospace,Menlo,monospace" font-size="9.5">
+            <text x="416" y="40" text-anchor="end" fill="var(--loop)">&#9679; opens a new region</text>
+            <text x="416" y="56" text-anchor="end" fill="var(--dag)">&#9679; diverse revisit &middot; error cancels</text>
+          </g>
+          <!-- sequence rows -->
+          <g stroke="var(--dag-dim)" stroke-width="1.2" fill="none">
+            <path d="M56 84 L350 84"/>
+            <path d="M56 150 L290 150"/>
+            <path d="M56 216 L350 216"/>
+            <path d="M56 282 L230 282"/>
+          </g>
+          <g stroke="var(--dag-dim)" stroke-width="1.2" fill="none" stroke-dasharray="3 6">
+            <path d="M356 84 L404 84" marker-end="url(#sq-ar)"/>
+            <path d="M296 150 L404 150" marker-end="url(#sq-ar)"/>
+            <path d="M356 216 L404 216" marker-end="url(#sq-ar)"/>
+            <path d="M236 282 L404 282" marker-end="url(#sq-ar)"/>
+          </g>
+          <!-- seeds -->
+          <g fill="var(--loop-soft)" stroke="var(--loop)" stroke-width="2">
+            <circle cx="46" cy="84" r="10"/><circle cx="46" cy="150" r="10"/>
+            <circle cx="46" cy="216" r="10"/><circle cx="46" cy="282" r="10"/>
+          </g>
+          <!-- generated steps -->
+          <g fill="var(--loop)">
+            <circle cx="110" cy="84" r="6"/><circle cx="170" cy="84" r="6"/><circle cx="290" cy="84" r="6"/><circle cx="350" cy="84" r="6"/>
+            <circle cx="110" cy="150" r="6"/><circle cx="230" cy="150" r="6"/><circle cx="290" cy="150" r="6"/>
+            <circle cx="110" cy="216" r="6"/><circle cx="170" cy="216" r="6"/><circle cx="230" cy="216" r="6"/><circle cx="350" cy="216" r="6"/>
+            <circle cx="110" cy="282" r="6"/><circle cx="170" cy="282" r="6"/><circle cx="230" cy="282" r="6"/>
+          </g>
+          <!-- diverse revisits: same region reached from different sequences -->
+          <g fill="var(--dag)">
+            <circle cx="230" cy="84" r="6"/><circle cx="170" cy="150" r="6"/><circle cx="290" cy="216" r="6"/>
+          </g>
+          <text x="230" y="320" text-anchor="middle" font-family="ui-monospace,Menlo,monospace"
+                font-size="10" fill="var(--faint)">generation stops only when the space is fully covered</text>
+          <text x="230" y="338" text-anchor="middle" font-family="ui-monospace,Menlo,monospace"
+                font-size="10" fill="var(--faint)">overlaps cancel each other's errors — the data gets cleaner as it grows</text>
+        </svg>
+      </figure></div>
+  </div>
+</section>
+
+<section class="slide" id="proven">
+  <div class="inner split"><div class="mtext">
+    <p class="eyebrow" style="color:var(--loop)">measured &middot; aug 2026</p>
+    <h2>Proven at small scale:<br>the machine explores what ordinary generation misses.</h2>
+    <p class="body" style="max-width:34em">Four domains. 20 sequences from a small open model reach
+    <b>100% of a frozen probe set</b> (40/40, 40/40, 40/40, 39/39 tracked concepts) — a single
+    frontier run reaches <b>&le;22%</b> of the same space.</p>
+    <p class="floodcap">pilot &middot; qwen-27B 4-bit vs one claude opus run (169 samples) &middot; next: matched-compute self-instruct / persona / multi-sample baselines &middot; methodology in appendix</p>
+  </div>
+    <div class="mfig" style="max-width:640px;width:100%"><figure class="fig"><svg viewBox="0 0 640 330" role="img" aria-label="Verified coverage rising with generation volume, still climbing at pilot cut-off, dashed projection beyond; a flat low band shows single-run generation">
+          <line x1="56" y1="280" x2="610" y2="280" stroke="var(--line)"/>
+          <line x1="56" y1="280" x2="56" y2="30" stroke="var(--line)"/>
+          <text x="50" y="40" text-anchor="end" font-family="var(--mono)" font-size="9" fill="var(--faint)">high</text>
+          <text x="50" y="283" text-anchor="end" font-family="var(--mono)" font-size="9" fill="var(--faint)">0</text>
+          <path d="M56 278 C 120 240, 180 190, 250 150 C 310 118, 360 100, 400 88" fill="none" stroke="var(--loop)" stroke-width="2.6"/>
+          <path d="M400 88 C 460 72, 540 58, 608 48" fill="none" stroke="var(--loop)" stroke-width="2" stroke-dasharray="6 6" opacity=".75"/>
+          <line x1="400" y1="280" x2="400" y2="60" stroke="var(--faint)" stroke-dasharray="3 5"/>
+          <circle cx="400" cy="88" r="5" fill="var(--loop)"/>
+          <text x="400" y="300" text-anchor="middle" font-family="var(--mono)" font-size="9.5" fill="var(--muted)">pilot cut-off</text>
+          <text x="408" y="112" font-family="var(--mono)" font-size="9.5" fill="var(--loop)">still climbing at cut-off —</text><text x="408" y="126" font-family="var(--mono)" font-size="9.5" fill="var(--loop)">probe set full, space is not</text>
+          <path d="M56 278 C 140 262, 300 254, 608 250" fill="none" stroke="var(--dag)" stroke-width="1.8" stroke-dasharray="7 6"/>
+          <text x="604" y="242" text-anchor="end" font-family="var(--mono)" font-size="9.5" fill="var(--dag)">undirected single-run generation</text>
+          <text x="333" y="322" text-anchor="middle" font-family="var(--mono)" font-size="9.5" fill="var(--faint)">generation volume &#8594; &nbsp; solid = measured &middot; dashed = seed experiment</text>
+        </svg></figure></div>
+  </div>
+</section>
+
+<section class="slide" id="vlm">
+  <div class="inner" style="position:relative">
+    <h2 style="text-align:center">We've shipped this technique before.</h2>
+    <p class="body" style="max-width:48em;margin-left:auto;margin-right:auto;text-align:center">In VLM systems shipped worldwide, we trained
+    with <b>focused synthetic data</b>: models improved drastically in the target
+    direction — <b>without catastrophic forgetting</b>, the classic failure of
+    narrow fine-tuning.</p>
+    <figure class="fig" style="margin:22px auto 0;width:fit-content;max-width:100%">
+      <video src="vlm-reel-slide.mp4" autoplay muted loop playsinline
+             style="display:block;margin:0 auto;width:auto;max-width:100%;max-height:60vh;border-radius:10px;border:1px solid var(--line);background:#F4F1EA"></video>
+      <figcaption style="text-align:center;white-space:normal">deployed frames &middot; focused data closes the size gap (21 pts &rarr; 3.0) &middot; general skill kept, focus gains +6.5&ndash;10.5</figcaption>
+    </figure>
+    <p class="floodcap" style="margin-top:12px;text-align:center">measured &middot; vlm tracks: 3M-image focused corpus, securebench-v / atmbench / retailbench &middot; face: 40M-image corpus, NIST FRVT top-25 &middot; full charts in data room</p>
+  </div>
+</section>
+
+<section class="slide mega" id="experiment">
+  <div class="inner">
+    <p class="eyebrow" style="color:var(--loop)">the seed experiment &middot; to prove</p>
+    <h2 class="huge">Does verified coverage<br>become expertise?</h2>
+    <div class="rowlist">
+      <div class="r"><b>Hypothesis</b> — at matched compute and base model, higher verified coverage &rArr; higher held-out specialist performance.</div>
+      <div class="r"><b>Against</b> — frontier + best harness &middot; matched SFT &middot; equal-budget teacher distillation.</div>
+      <div class="r"><b>Judged on</b> — decision quality &middot; critical errors &middot; calibration &middot; cost. Thresholds defined before training.</div>
+    </div>
+  </div>
+</section>
+
+<section class="slide mega" id="first">
+  <div class="inner">
+    <p class="eyebrow">first expert</p>
+    <h2 class="huge">First expert:<br>the validation decision.</h2>
+    <p class="sub" style="margin-top:18px"><b>Given a hypothesis and constraints, choose the cheapest test
+    that produces decisive evidence.</b></p>
+    <div class="rowlist">
+      <div class="r"><b>Nobody logs it</b> — the tests considered and rejected never become data.</div>
+      <div class="r"><b>Cheap to verify in the real world</b> — a cheap experiment is cheap to run; ground truth arrives in days.</div>
+      <div class="r"><b>Our deepest domain</b> — billions of tokens spent exploring what makes ventures viable.</div>
+    </div>
+    <p class="floodcap" style="margin-top:16px">roles are labels &middot; decision families are the training unit &middot; M_CEO is the composition, not the first task</p>
+  </div>
+</section>
+
+<section class="slide mega" id="personal">
+  <div class="inner">
+    <p class="eyebrow">personalization</p>
+    <h2 class="huge">Your history is D&#8320;.<br>We train on D*.</h2>
+    <p class="sub">A company's data covers only what already happened. Its next expert must reason about
+    what hasn't: <b>losing the largest customer &middot; entering a new market &middot; pricing 4&times; higher &middot;
+    cutting burn 60% &middot; an acquisition offer.</b> The engine expands company history into that
+    counterfactual decision space — <b>the model itself adapts. Not RAG.</b></p>
+  </div>
+</section>
+
+<section class="slide mega" id="loop">
+  <div class="inner">
+    <p class="eyebrow">the loop closes</p>
+    <h2 class="huge">Deployed, the world<br>becomes the verifier.</h2>
+    <p class="mathstrip" style="margin-top:24px">decision &rarr; action &rarr; outcome &rarr; <span class="hot">proprietary feedback</span> &rarr; better specialist</p>
+    <p class="sub">Every deployment generates decision-outcome data no competitor has —
+    <b>the corpus, the verifier and the weights compound together.</b></p>
+  </div>
+</section>
+
+<section class="slide mega" id="platform">
+  <div class="inner">
+    <p class="eyebrow">platform</p>
+    <h2 class="huge">The first expert proves the model.<br>The second proves the machine.</h2>
+    <p class="sub">What transfers to expert #2: the coverage machinery, verifier framework, curriculum,
+    training and evaluation stack. <b>If marginal cost falls domain over domain, Truna is a factory
+    — and the experts compose into role intelligence.</b></p>
+  </div>
+</section>
+
+<section class="slide mega" id="whynow">
+  <div class="inner">
+    <p class="eyebrow">why now</p>
+    <h2 class="huge">Open models caught up.<br>Judgment didn't.</h2>
+    <div class="rowlist">
+      <div class="r"><b>Execution matured</b> — agents and harnesses work now; the binding constraint moved to specialist judgment.</div>
+      <div class="r"><b>Open bases reached the frontier's neighborhood</b> — we specialize strong free models; we never pay for pretraining.</div>
+      <div class="r"><b>Training data became AI's most contested layer</b> — the internet is spent; labs pay $1B+/yr for generated signal.</div>
+    </div>
+    <p class="sub"><b>Genesis manufactures experiences robots never lived.
+    We manufacture decisions companies never faced.</b></p>
+  </div>
+</section>
+
+<section class="slide mega" id="landscape">
+  <div class="inner">
+    <p class="eyebrow">the landscape</p>
+    <h2 class="huge">Everyone owns an asset.<br>Nobody owns the missing one.</h2>
+    <div class="rowlist">
+      <div class="r"><b>Frontier labs</b> — general weights + massive pretraining. Sell generality; buy training signal.</div>
+      <div class="r"><b>Vertical AI</b> (Harvey, Sierra, Abridge) — workflow data + distribution. Capped at what customers logged.</div>
+      <div class="r"><b>Data suppliers</b> (Scale, Surge, Mercor) — human production of labels and environments.</div>
+      <div class="r"><b>Specialist trainers</b> (Fastino, Arcee) — fine-tunes on data someone already collected.</div>
+      <div class="r"><b>Experience manufacturers</b> (Genesis &middot; Prime Intellect &middot; Deeptune&rarr;Mercor) — generated worlds for robots, reasoning, digital work. <b>None targets business decisions.</b></div>
+      <div class="r"><b>Truna</b> — <b>a machine that manufactures the decision coverage that doesn't exist.</b></div>
+    </div>
+  </div>
+</section>
+
+<section class="slide mega" id="team">
+  <div class="inner">
+    <p class="eyebrow">team</p>
+    <h2 class="huge">Three founders. Twenty years.</h2>
+    <div class="tfaces">
+      <div class="tf"><img src="gagan.jpg" alt="Gagan Gupta"><div><div class="nm">Gagan Gupta</div><div class="rl" style="max-width:30em">trains the models &middot; 20 yrs production deep learning &middot; full LLM lifecycle — data to weights to serving</div></div></div>
+      <div class="tf"><img src="nitin.jpg" alt="Nitin Jindal"><div><div class="nm">Nitin Jindal</div><div class="rl" style="max-width:30em">runs them cheap &middot; inference cost is the COGS &middot; NIST-ranked efficiency &middot; production systems at scale</div></div></div>
+      <div class="tf"><img src="avinash.jpg" alt="Avinash Saxena"><div><div class="nm">Avinash Saxena</div><div class="rl" style="max-width:30em">deploys into companies &middot; built 3, scaled 2 AI products &middot; B2C, operations, media, B2B &middot; across continents</div></div></div>
+    </div>
+    <p class="sub">Together since IIT Delhi, 2006.</p>
+  </div>
+</section>
+
+<section class="slide mega" id="company">
+  <div class="inner">
+    <p class="eyebrow">the company</p>
+    <h2 class="huge">Truna is a model company.</h2>
+    <div class="rowlist">
+      <div class="r"><b>Primary product</b> — specialist decision intelligence: deployed, priced by access and usage, eventually personalized per company.</div>
+      <div class="r"><b>Future optionality</b> — data licensing and benchmarks.</div>
+    </div>
+  </div>
+</section>
+
+<section class="slide mega" id="ask">
+  <div class="inner">
+    <p class="eyebrow">the round</p>
+    <h2 class="huge">Fund the proof.</h2>
+    <p class="mathstrip">$15M seed &nbsp;&middot;&nbsp; first technical readout <span class="hot">month 6&ndash;9</span> &nbsp;&middot;&nbsp; runway <span class="hot">18&ndash;24 months</span></p>
+    <div class="rowlist">
+      <div class="r"><b>M1</b> — machine scales: coverage advantage survives volume &middot; scaling curves, cost per new verified region</div>
+      <div class="r"><b>M2</b> — coverage becomes capability: first expert beats matched baselines &middot; weights + benchmark</div>
+      <div class="r"><b>M3</b> — the machine repeats: second decision family at lower marginal effort</div>
+      <div class="r"><b>M4</b> — personalization works &middot; <b>M5</b> — deployment closes the live feedback loop</div>
+    </div>
+    <figure class="fig" style="margin-top:18px;max-width:56em">
+        <div style="display:flex;height:30px;border-radius:8px;overflow:hidden;border:1px solid var(--line)">
+          <div style="flex:65;min-width:0;background:var(--loop)"></div>
+          <div style="flex:70;min-width:0;background:var(--loop-soft)"></div>
+          <div style="flex:5;min-width:0;background:var(--dag)"></div>
+          <div style="flex:10;min-width:0;background:var(--dag-dim)"></div>
+        </div>
+        <div style="margin-top:12px;font-family:var(--mono);font-size:var(--fs-caption);line-height:2;color:var(--muted)">
+          <span style="display:inline-block;margin-right:22px"><span style="display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:8px;background:var(--loop);vertical-align:middle"></span><b style="color:var(--ink)">$6.5M</b> data generation + training compute</span><span style="display:inline-block;margin-right:22px"><span style="display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:8px;background:var(--loop-soft);border:1px solid var(--loop);vertical-align:middle"></span><b style="color:var(--ink)">$7M</b> team &middot; 18&ndash;24 mo</span><span style="display:inline-block;margin-right:22px"><span style="display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:8px;background:var(--dag);vertical-align:middle"></span><b style="color:var(--ink)">$0.5M</b> benchmark &amp; evaluation</span><span style="display:inline-block"><span style="display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:8px;background:var(--dag-dim);vertical-align:middle"></span><b style="color:var(--ink)">$1M</b> ops &amp; contingency</span>
+        </div>
+    </figure>
+    <p class="floodcap" style="margin-top:14px">adaptive gates — cheap ablations before full-scale runs &middot; headcount plan in appendix</p>
+  </div>
+</section>
+
+<section class="slide s-title" id="close">
+  <div class="inner">
+    <p class="brand">Truna</p>
+    <h1>The experts are in training.</h1>
+    <p class="closing">Bet on the data no one else can make.</p>
+    <p class="endfoot">truna.ai &middot; 2026 &middot; end of deck &middot; &larr; to revisit</p>
+    </div>
+</section>
+
+<section class="slide" id="p-nitin">
+  <div class="inner">
+    <p class="eyebrow">Appendix &middot; founder profiles</p>
+    <div style="display:flex;align-items:center;gap:18px;margin-bottom:4px"><img class="pavatar" src="nitin.jpg" alt="Nitin Jindal" style="width:88px;height:88px;object-fit:cover;border-radius:14px;border:1px solid var(--line)"><h2 style="margin:0">Nitin Jindal</h2></div>
+    <div style="max-width:54em">
+      <ul class="marks">
+        <li><b>LLM &amp; VLM inference optimisation</b> — quantisation, KV-cache,
+        speculative decoding, hardware-aware compilation, on GPU clusters and edge
+        silicon. For an engine that burns billions of tokens,
+        <b>inference cost is the COGS</b>.</li>
+        <li>Extreme-efficiency proofs: face authentication running
+        <b>one year on a battery</b>; 8-face simultaneous recognition on a
+        low-cost embedded chip.</li>
+        <li>Face-recognition algorithm ranked <b>worldwide top-25</b> on the
+        US NIST FRVT benchmark.</li>
+        <li>MS, Vision &amp; AI, Grenoble &middot; IIT Delhi CS '06,
+        <b>Best Graduation Project</b>.</li>
+      </ul>
+    </div>
+    <div class="evrow">
+      <img src="ev-face.jpg" alt="Face recognition match screen">
+      <img src="ev-iris.jpg" alt="Iris scan">
+      <img src="ev-inspect.jpg" alt="Inline camera QA">
+      <img src="ev-toll.jpg" alt="Toll automation">
+    </div>
+    <p class="evcap">field systems — face recognition &middot; iris &middot; inline QA &middot; toll automation</p>
+  </div>
+</section>
+
+<section class="slide" id="p-gagan">
+  <div class="inner">
+    <p class="eyebrow">Appendix &middot; founder profiles</p>
+    <div style="display:flex;align-items:center;gap:18px;margin-bottom:4px"><img class="pavatar" src="gagan.jpg" alt="Gagan Gupta" style="width:88px;height:88px;object-fit:cover;border-radius:14px;border:1px solid var(--line)"><h2 style="margin:0">Gagan Gupta</h2></div>
+    <div style="max-width:54em">
+      <ul class="marks">
+        <li><b>Full LLM lifecycle</b> — distributed pre-training, instruction tuning,
+        preference optimisation, multimodal (VLM) alignment.</li>
+        <li>Vision systems shipped worldwide: <b>Walmart</b> — photo-to-product search
+        over millions of items in under a second; <b>Disney Orlando</b> — 99%+ people
+        counting at every park gate.</li>
+        <li>Named inventor on <b>four US patents</b> in computer vision and
+        face recognition.</li>
+        <li>Masters, INRIA France &middot; IIT Delhi CS '06 — co-built Roposo's
+        compression, <b>infrastructure cost down 30%</b>.</li>
+      </ul>
+    </div>
+    <div class="evrow">
+      <img src="ev-aerial.jpg" alt="Aerial object detection">
+      <img src="ev-track.jpg" alt="People tracking">
+      <img src="ev-count.jpg" alt="People counting">
+      <img src="ev-synopsis.jpg" alt="Video synopsis">
+    </div>
+    <p class="evcap">field systems — aerial detection &middot; tracking &middot; counting &middot; video synopsis</p>
+  </div>
+</section>
+
+<section class="slide" id="p-avinash">
+  <div class="inner">
+    <p class="eyebrow">Appendix &middot; founder profiles</p>
+    <div style="display:flex;align-items:center;gap:18px;margin-bottom:4px"><img class="pavatar" src="avinash.jpg" alt="Avinash Saxena" style="width:88px;height:88px;object-fit:cover;border-radius:14px;border:1px solid var(--line)"><h2 style="margin:0">Avinash Saxena</h2></div>
+    <div style="max-width:54em">
+      <ul class="marks">
+        <li><b>Zomato</b> — CTO. India's food-delivery giant, through its early
+        hyper-growth.
+        <span class="now">&rarr; today: Eternal, listed on NSE, ~$28B market cap</span></li>
+        <li><b>Roposo</b> — founder. Consumer short-video platform; $21M raised from
+        <b>Tiger Global</b>, India Quotient, Binny Bansal.
+        <span class="now">&rarr; acquired by InMobi's Glance; Google later invested $145M</span></li>
+        <li><b>BarRaiser</b> — founder &amp; CEO. AI-powered interview intelligence.
+        <span class="now">&rarr; today: running product, tech and sales across India, the US and the UK</span></li>
+        <li><b>IIT Delhi '06</b> — same batch as Nitin and Gagan. <b>BOSS Award</b> for
+        the best experimental project in Physics: a superconducting flywheel for
+        energy storage.</li>
+      </ul>
+    </div>
+    <div class="logos">
+      <span class="lchip"><img src="logo-zomato.png" alt="Zomato"></span>
+      <span class="lchip"><img src="logo-roposo.png" alt="Roposo"></span>
+      <span class="lchip"><img src="logo-barraiser.png" alt="BarRaiser"></span>
+    </div>
+  </div>
+</section>
+
+<section class="slide" id="workstreams">
+  <div class="inner">
+    <p class="eyebrow">Appendix &middot; workstreams &rarr; outputs</p>
+    <h2>What the money does.</h2>
+    <div class="covtab" style="max-width:52em"><table>
+      <tr><th>Workstream</th><th>Output</th></tr>
+      <tr><td>Space mapping &amp; coverage analytics</td>
+          <td>the coverage meter; full-space curves, published</td></tr>
+      <tr><td>Data generation at scale</td>
+          <td>per-expert synthetic corpora across domains</td></tr>
+      <tr><td>Training &amp; evaluation engine</td>
+          <td>first-expert checkpoints; ablations at matched size</td></tr>
+      <tr><td>Benchmark development</td>
+          <td>a public business-decision benchmark</td></tr>
+      <tr><td>Compute optimization &amp; infra</td>
+          <td>cost per sequence &amp; per cycle, driven down each cycle</td></tr>
+      <tr><td>Design-partner program</td>
+          <td>partner signed; alpha released for people to use</td></tr>
+    </table></div>
+    <p class="floodcap" style="margin-top:12px">every workstream ends in an artifact an investor can inspect</p>
+  </div>
+</section>
+
+<section class="slide" id="mkt">
+  <div class="inner">
+    <p class="eyebrow">Appendix &middot; market</p>
+    <h2>The market is already paying.</h2>
+    <div class="rowlist">
+      <div class="r"><b>Labs pay $1B+ a year for training data</b> — Meta bought 49% of Scale for $14.3B &middot; NVIDIA bought Gretel &middot; Mercor is buying Deeptune.</div>
+      <div class="r"><b>Specialist AI is valued highest</b> — Harvey $11B &middot; Sierra $15.8B &middot; Abridge $5.3B &middot; Corma $60M seed led by Sequoia.</div>
+      <div class="r"><b>Making training experience is now its own category</b> — Genesis (robots) &middot; Prime Intellect (reasoning) &middot; P-1 (engineering) &middot; Simile (behavior).</div>
+      <div class="r"><b>Truna's space: business decisions</b> — start with one decision family, grow to roles, then to every company.</div>
+    </div>
+    <p class="floodcap" style="margin-top:14px">public reporting &middot; aug 2026 &middot; numbers move — re-check before sharing</p>
+  </div>
+</section>
+
+
+<section class="slide" id="exhibit-a">
+  <div class="inner" style="max-width:1240px">
+    <p class="eyebrow">Appendix &middot; the harness experiments &middot; witnessed</p>
+    <h2 style="text-align:center">What the harness path built &mdash; and the bar it never reached.</h2>
+    <figure class="fig" style="margin:22px auto 0;width:fit-content;max-width:100%">
+      <video src="exhibit-reel.mp4" autoplay muted loop playsinline
+             style="display:block;margin:0 auto;width:auto;max-width:100%;max-height:62vh;border-radius:10px;border:1px solid var(--line);background:#F4F1EA"></video>
+      <figcaption style="text-align:center;white-space:normal">same goal, four machines &middot; frontier &rarr; newest frontier &rarr; frontier + our harness &rarr; the real-world bar</figcaption>
+    </figure>
+      </div>
+</section>
+
+<section class="slide" id="filling">
+  <div class="inner" style="max-width:1280px;position:relative">
+    <p class="eyebrow" style="text-align:center">Appendix &middot; measured &middot; aug 2026</p>
+    <h2 style="text-align:center">Watch the space fill.</h2>
+    <figure class="fig" style="margin:22px auto 0;width:fit-content;max-width:100%">
+      <video src="coverage-all.mp4" autoplay muted loop playsinline
+             style="display:block;margin:0 auto;width:auto;max-width:100%;max-height:58vh;border-radius:10px;border:1px solid var(--line);background:#F4F1EA"></video>
+      <figcaption style="text-align:center">four domains, back to back &middot; 20 sequences from a small open model reach every tracked concept &middot; a single frontier run reaches &le;22% &middot; pilot scale</figcaption>
+    </figure>
+  
+    
+  </div>
+</section>
+
+<section class="slide" id="faq">
+  <div class="inner">
+    <p class="eyebrow">Appendix &middot; before you ask</p>
+    <h2>The questions you're already asking.</h2>
+    <div class="faq">
+      <div class="qa">
+        <p class="q">"Won't the next frontier model make this pointless?"</p>
+        <p class="a">Better base models make our specialists stronger — we retrain on our data. <b>The moat is the coverage data, not the weights.</b></p>
+      </div>
+      <div class="qa">
+        <p class="q">"Is synthetic data any good?"</p>
+        <p class="a">Seed-bound synthetic data circles what it already knows. Ours expands a <b>mapped space with measured coverage.</b></p>
+      </div>
+      <div class="qa">
+        <p class="q">"Why won't the labs build this?"</p>
+        <p class="a">They sell generality. And they're <b>buyers</b> of this layer — $1B+/year — not just rivals.</p>
+      </div>
+      <div class="qa">
+        <p class="q">"How do you measure a CEO model?"</p>
+        <p class="a">Outcomes take years — the decision <b>process</b> is checkable now: facts, constraints, risks, assumptions. <b>That's how boards judge CEOs.</b></p>
+      </div>
+      <div class="qa">
+        <p class="q">"What if a lab copies the method?"</p>
+        <p class="a"><b>Every cycle adds coverage nobody else has.</b> A copy starts at zero on a curve we publish.</p>
+      </div>
+      <div class="qa">
+        <p class="q">"What about hallucinations?"</p>
+        <p class="a">In a generator, imagination is the point — a scenario is <b>a region to master, not a fact to memorize.</b></p>
+      </div>
+      <div class="qa">
+        <p class="q">"Where's revenue?"</p>
+        <p class="a">This seed buys the proof; <b>first paid deployments land with design partners around the next round.</b></p>
+      </div>
+      <div class="qa">
+        <p class="q">"Why this team?"</p>
+        <p class="a">Training (Gagan) + inference cost (Nitin) + <b>live companies</b> (Avinash). The thesis is the three of us.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+</div>
+
+<div class="hud" aria-hidden="false">
+  <div class="row">
+    <span class="keys">&larr; &rarr; / swipe &middot; A all slides &middot; F fullscreen &middot; &#8997;+draw copies context</span>
+    <span class="right">
+      <span id="counter">01 / 29</span>
+      <button id="themebtn" aria-label="Toggle light or dark theme">&#x25D0;</button>
+      <button id="fsbtn" aria-label="Toggle fullscreen">&#x26F6;</button>
+      <svg width="26" height="26" viewBox="0 0 26 26">
+        <circle class="track" cx="13" cy="13" r="10" fill="none" stroke-width="2"/>
+        <circle class="fill" id="progring" cx="13" cy="13" r="10" fill="none" stroke-width="2"
+                stroke-linecap="round" stroke-dasharray="62.83" stroke-dashoffset="62.83"/>
+      </svg>
+      <button id="prev" aria-label="Previous slide">&lsaquo;</button>
+      <button id="next" aria-label="Next slide">&rsaquo;</button>
+    </span>
+  </div>
+</div>
+
+<script>
+(function(){
+  /* ---------- ambient arcs ---------- */
+  var cv = document.getElementById('rings'), ctx = cv.getContext('2d');
+  var reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var RINGS = [
+    {r:.10, gap:0,   speed: .00022, a:.30, warm:true},
+    {r:.17, gap:0,   speed:-.00016, a:.24, warm:true},
+    {r:.26, gap:0,   speed: .00011, a:.19, warm:true},
+    {r:.37, gap:.9,  speed:-.00007, a:.17, warm:false},
+    {r:.50, gap:1.4, speed: .00005, a:.14, warm:false},
+    {r:.66, gap:1.9, speed:-.000035,a:.12, warm:false},
+    {r:.85, gap:2.6, speed: .000025,a:.10, warm:false}
+  ];
+  function colors(){
+    var cs = getComputedStyle(document.documentElement);
+    return { warm: cs.getPropertyValue('--loop').trim() || '#E08A3C',
+             cold: cs.getPropertyValue('--dag').trim()  || '#7E93AC' };
+  }
+  var C = colors();
+  function size(){
+    var dpr = Math.min(2, window.devicePixelRatio || 1);
+    cv.width = innerWidth * dpr; cv.height = innerHeight * dpr;
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+  }
+  size(); addEventListener('resize', function(){ size(); draw(lastT); });
+  if (matchMedia('(prefers-color-scheme: light)').addEventListener)
+    matchMedia('(prefers-color-scheme: light)').addEventListener('change', function(){ C = colors(); });
+  new MutationObserver(function(){ C = colors(); })
+    .observe(document.documentElement, {attributes:true, attributeFilter:['data-theme']});
+  var lastT = 0;
+  function draw(t){
+    lastT = t;
+    ctx.clearRect(0,0,innerWidth,innerHeight);
+    var cx = innerWidth * 1.06, cy = innerHeight * .22;
+    var base = Math.max(innerWidth, innerHeight) * .62;
+    for (var i=0;i<RINGS.length;i++){
+      var g = RINGS[i], R = base * g.r;
+      var rot = t * g.speed + i * 1.7;
+      ctx.beginPath();
+      ctx.arc(cx, cy, R, rot + g.gap/2, rot + Math.PI*2 - g.gap/2);
+      ctx.strokeStyle = g.warm ? C.warm : C.cold;
+      ctx.globalAlpha = g.a;
+      ctx.lineWidth = g.warm ? 1.4 : 1.1;
+      ctx.stroke();
+    }
+    ctx.globalAlpha = 1;
+  }
+  if (reduced) { draw(0); }
+  else (function tick(t){ draw(t||0); requestAnimationFrame(tick); })();
+
+  /* ---------- slide engine ---------- */
+  var slides = Array.prototype.slice.call(document.querySelectorAll('.slide'));
+  var n = slides.length, cur = 0;
+  var stacked = /[?&]all\b/.test(location.search);
+  var themeOverride = (location.search.match(/[?&]theme=(dark|light)/) || [])[1];
+  if (themeOverride) document.documentElement.dataset.theme = themeOverride;
+  var CIRC = 62.83;
+
+  function pad(x){ return (x<10?'0':'')+x; }
+  function fit(){
+    if (!document.body.classList.contains('slides')) return;
+    var s = slides[cur], innerEl = s.querySelector('.inner');
+    if (!innerEl) return;
+    innerEl.style.zoom = '';
+    var ratio = s.clientHeight / s.scrollHeight;
+    if (ratio < 1) innerEl.style.zoom = String(Math.max(.55, ratio * .97));
+  }
+  function show(i, push){
+    cur = Math.max(0, Math.min(n-1, i));
+    slides.forEach(function(s,k){ s.classList.toggle('active', k===cur); });
+    var ring = document.getElementById('progring');
+    if (ring) ring.style.strokeDashoffset = String(CIRC * (1 - (cur+1)/n));
+    var c = document.getElementById('counter');
+    if (c) c.textContent = pad(cur+1) + ' / ' + pad(n);
+    if (push !== false) { try { history.replaceState(null,'','#'+(cur+1)); } catch(e){} }
+    slides[cur].scrollTop = 0;
+    requestAnimationFrame(fit);
+  }
+  addEventListener('resize', function(){ requestAnimationFrame(fit); });
+  function enterSlides(){
+    document.body.classList.add('slides');
+    var h = parseInt((location.hash||'').replace('#',''),10);
+    show(isNaN(h) ? 0 : h-1, false);
+  }
+  function exitSlides(){
+    document.body.classList.remove('slides');
+    slides.forEach(function(s){ s.classList.remove('active'); });
+  }
+
+  if (!stacked) enterSlides();
+
+  document.addEventListener('keydown', function(e){
+    if (e.metaKey || e.ctrlKey || e.altKey) return;
+    var inSlides = document.body.classList.contains('slides');
+    if (e.key === 'a' || e.key === 'A') {
+      inSlides ? exitSlides() : enterSlides();
+      e.preventDefault(); return;
+    }
+    if (e.key === 'f' || e.key === 'F') { toggleFS(); e.preventDefault(); return; }
+    if (!inSlides) return;
+    if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') { show(cur+1); e.preventDefault(); }
+    else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { show(cur-1); e.preventDefault(); }
+    else if (e.key === 'Home') { show(0); e.preventDefault(); }
+    else if (e.key === 'End') { show(n-1); e.preventDefault(); }
+  });
+  var pb = document.getElementById('prev'), nb = document.getElementById('next');
+  if (pb) pb.addEventListener('click', function(){ show(cur-1); });
+  if (nb) nb.addEventListener('click', function(){ show(cur+1); });
+  function toggleFS(){
+    if (document.fullscreenElement) { document.exitFullscreen(); }
+    else if (document.documentElement.requestFullscreen) { document.documentElement.requestFullscreen(); }
+  }
+  var fb = document.getElementById('fsbtn');
+  if (fb) fb.addEventListener('click', toggleFS);
+  /* ---------- light / dark toggle ---------- */
+  var tb = document.getElementById('themebtn');
+  function effTheme(){
+    return document.documentElement.dataset.theme
+      || (matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+  }
+  function syncTheme(){ if (tb) tb.textContent = effTheme() === 'dark' ? '☀' : '☾'; }
+  if (tb) tb.addEventListener('click', function(){
+    document.documentElement.dataset.theme = effTheme() === 'dark' ? 'light' : 'dark';
+    C = colors();
+    syncTheme();
+  });
+  syncTheme();
+  var tX = null, tY = null;
+  document.addEventListener('touchstart', function(e){
+    if (!document.body.classList.contains('slides')) return;
+    tX = e.touches[0].clientX; tY = e.touches[0].clientY;
+  }, {passive:true});
+  document.addEventListener('touchend', function(e){
+    if (tX === null) return;
+    var dx = e.changedTouches[0].clientX - tX, dy = e.changedTouches[0].clientY - tY;
+    if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.5) show(cur + (dx < 0 ? 1 : -1));
+    tX = tY = null;
+  }, {passive:true});
+  window.addEventListener('hashchange', function(){
+    if (!document.body.classList.contains('slides')) return;
+    var h = parseInt((location.hash||'').replace('#',''),10);
+    if (!isNaN(h) && h-1 !== cur) show(h-1, false);
+  });
+})();
+</script>
+
+<script src="annotate.js"></script>
